@@ -1,8 +1,10 @@
 class OrderedList:
 	def __init__(self):
 		self.front = None
+		self.size = 0
 
 	def add(self, addedItem):
+		self.size += 1
 		if self.front is None:
 			newItem = OrderedListItem(addedItem, self.front)
 			self.front = newItem
@@ -25,20 +27,47 @@ class OrderedList:
 		previousItem.updateNext(newItem)
 
 	def remove(self, objectToRemove):
+		self.size -= 1
+		itemLinks = self.getItemLinksWithValue(objectToRemove)
+		if itemLinks is None:
+			return False
+
+		if itemLinks[0] == None:
+			self.front = nextItem.next
+			return True
+
+		itemLinks[0].next = itemLinks[1].next
+		return True
+
+	def getItemLinksWithValue(self, valueToCheck):
 		previousItem = None
 		nextItem = self.front
 		while nextItem is not None:
-			if nextItem.storedItem == objectToRemove:
-				if previousItem is None:
-					self.front = nextItem.next
-					return
-				previousItem.next = nextItem.next
-				return
+			if nextItem.storedItem == valueToCheck:
+				return (previousItem, nextItem)
 			previousItem = nextItem
 			nextItem = nextItem.next
+		return None
+
+	def pop(self, index = -1):
+		self.size -= 1
+		if self.front is None:
+			return None
+		previous = None
+		currentItem = self.front
+		while currentItem.next is not None:
+			if index == 0:
+				if previous is None:
+					self.front = currentItem.next
+				else:
+					previous.next = currentItem.next
+				return currentItem.storedItem
+			index -= 1
+			previous = currentItem
+			currentItem = currentItem.next
+		return currentItem.storedItem
 
 	def search(self, objectToLookFor):
-		index = 0
 		currentItem = self.front
 		while currentItem is not None:
 			if currentItem.storedItem == objectToLookFor:
@@ -67,31 +96,6 @@ class OrderedList:
 			nextItem = nextItem.next
 
 		return str(listItems)
-
-	def size(self):
-		currentItem = self.front
-		listSize = 0
-		while currentItem is not None:
-			listSize += 1
-			currentItem = currentItem.next
-		return listSize
-
-	def pop(self, index = -1):
-		if self.front is None:
-			return None
-		previous = None
-		currentItem = self.front
-		while currentItem.next is not None:
-			if index == 0:
-				if previous is None:
-					self.front = currentItem.next
-				else:
-					previous.next = currentItem.next
-				return currentItem.storedItem
-			index -= 1
-			previous = currentItem
-			currentItem = currentItem.next
-		return currentItem.storedItem
 
 	def isEmpty(self):
 		return self.front is None
