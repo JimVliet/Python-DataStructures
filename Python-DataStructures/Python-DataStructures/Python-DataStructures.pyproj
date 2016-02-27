@@ -22,7 +22,16 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Deque.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="encryptTest.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OrderedList.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Queue.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stack.py">

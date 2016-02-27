@@ -1,18 +1,27 @@
 class Stack:
-     def __init__(self):
-         self.items = []
+	def __init__(self):
+		self.firstInStack = None
+		self.size = 0
 
-     def isEmpty(self):
-         return self.items == []
+	def add(self, object):
+		self.size +=1
+		self.firstInStack = StackItem(object, self.firstInStack)
 
-     def push(self, item):
-         self.items.append(item)
+	def isEmpty(self):
+		return self.firstInStack is None
 
-     def pop(self):
-         return self.items.pop()
+	def pop(self):
+		if self.firstInStack is None:
+			raise IndexError
+		self.size -= 1
+		var = self.firstInStack.object
+		self.firstInStack = self.firstInStack.next
+		return var
 
-     def peek(self):
-         return self.items[len(self.items)-1]
+class StackItem:
+	def __init__(self, object, nextInStack):
+		self.object = object
+		self.next = nextInStack
 
-     def size(self):
-         return len(self.items)
+	def updateNext(self, nextStackObject):
+		self.next = nextStackObject

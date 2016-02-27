@@ -1,7 +1,12 @@
-from ReverseString import reverseString
-from encryptTest import *
+from OrderedList import OrderedList
 
-stringToDec = encrypt(14, "012")
-
-print(stringToDec)
-print(decrypt(stringToDec, "012"))
+newList = OrderedList()
+newList.add(4)
+newList.add(-5)
+newList.add(15)
+newList.add(10)
+newList.add(11)
+newList.add(22)
+print(newList)
+print(newList.pop(2))
+print(newList)
