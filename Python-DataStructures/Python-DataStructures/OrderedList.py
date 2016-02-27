@@ -2,17 +2,17 @@ class OrderedList:
 	def __init__(self):
 		self.front = None
 
-	def add(self, object):
+	def add(self, addedItem):
 		if self.front is None:
-			newItem = OrderedListItem(object, self.front)
+			newItem = OrderedListItem(addedItem, self.front)
 			self.front = newItem
 			return
 
 		previousItem = None
 		nextItem = self.front
 		while nextItem is not None:
-			if object < nextItem.object:
-				newItem = OrderedListItem(object, nextItem)
+			if addedItem < nextItem.storedItem:
+				newItem = OrderedListItem(addedItem, nextItem)
 				if previousItem is not None:
 					previousItem.updateNext(newItem)
 				else:
@@ -21,14 +21,14 @@ class OrderedList:
 			previousItem = nextItem
 			nextItem = nextItem.next
 
-		newItem = OrderedListItem(object, None)
+		newItem = OrderedListItem(addedItem, None)
 		previousItem.updateNext(newItem)
 
 	def remove(self, objectToRemove):
 		previousItem = None
 		nextItem = self.front
 		while nextItem is not None:
-			if nextItem.object == objectToRemove:
+			if nextItem.storedItem == objectToRemove:
 				if previousItem is None:
 					self.front = nextItem.next
 					return
@@ -41,9 +41,9 @@ class OrderedList:
 		index = 0
 		currentItem = self.front
 		while currentItem is not None:
-			if currentItem.object == objectToLookFor:
+			if currentItem.storedItem == objectToLookFor:
 				return True
-			if currentItem.object > objectToLookFor:
+			if currentItem.storedItem > objectToLookFor:
 				return False
 			currentItem = currentItem.next
 		return False
@@ -57,13 +57,13 @@ class OrderedList:
 				return None
 			currentItem = currentItem.next
 
-		return currentItem.object
+		return currentItem.storedItem
 
 	def __str__(self):
 		listItems = []
 		nextItem = self.front
 		while nextItem is not None:
-			listItems.append(nextItem.object)
+			listItems.append(nextItem.storedItem)
 			nextItem = nextItem.next
 
 		return str(listItems)
@@ -87,19 +87,19 @@ class OrderedList:
 					self.front = currentItem.next
 				else:
 					previous.next = currentItem.next
-				return currentItem.object
+				return currentItem.storedItem
 			index -= 1
 			previous = currentItem
 			currentItem = currentItem.next
-		return currentItem.object
+		return currentItem.storedItem
 
 	def isEmpty(self):
 		return self.front is None
 
 
 class OrderedListItem:
-	def __init__(self, object, next):
-		self.object = object
+	def __init__(self, item, next):
+		self.storedItem = item
 		self.next = next
 
 	def updateNext(self, newNext):
