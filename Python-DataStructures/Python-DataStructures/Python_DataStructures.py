@@ -1,13 +1,15 @@
 from OrderedList import OrderedList
 
 newList = OrderedList()
-newList.add(4)
-newList.add(-5)
-newList.add(15)
+newList.add(5)
+newList.add(8)
 newList.add(10)
-newList.add(11)
-newList.add(22)
+newList.add(9)
+newList.add(4)
+
 print(newList)
-print(newList.remove(11))
-print(newList.remove(1))
+print(newList.pop(3))
+print(newList)
+print(newList.search(7))
+print(newList.index(2))
 print(newList)
