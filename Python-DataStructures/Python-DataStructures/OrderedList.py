@@ -5,59 +5,65 @@ class OrderedList:
 
 	def add(self, addedItem):
 		self.size += 1
-		if self.front is None:
-			newItem = OrderedListItem(addedItem, self.front, None)
+		if self.front is None or addedItem < self.front.storedItem:
+			newItem = OrderedListItem(addedItem, self.front)
 			self.front = newItem
 			return
-
-		for item in self.itemsInListGen():
-			if addedItem < item.storedItem:
-				newItem = OrderedListItem(addedItem, item, item.previous)
-				if item.previous is not None:
-					item.previous.next = newItem
-				else:
-					self.front = newItem
-				item.previous = newItem
+		
+		item = None
+		for item in self.nextItemGenerator():
+			if addedItem < item.next.storedItem:
+				newItem = OrderedListItem(addedItem, item.next)
+				item.next = newItem
 				return
 
-		newItem = OrderedListItem(addedItem, None, item)
-		item.next = newItem
+		if item is None:
+			newItem = OrderedListItem(addedItem, None)
+			self.front.next = newItem
+			return
+		newItem = OrderedListItem(addedItem, None)
+		item.next.next = newItem
 
 	def remove(self, objectToRemove):
-		for item in self.itemsInListGen():
-			if item.storedItem == objectToRemove:
-				if item.previous is None:
-					self.front = item.next
-					self.size -= 1
-					return True
+		if self.front is None:
+			return False
+		if self.front.storedItem == objectToRemove:
+			self.front = self.front.next
+			self.size -= 1
+			return True
+
+		for item in self.nextItemGenerator():
+			if item.next.storedItem == objectToRemove:
 				self.size -= 1
-				item.previous.next = item.next
+				item.next = item.next.next
 				return True
 			#Check if it's still possible to remove the object
 			if item.storedItem > objectToRemove:
 				return False
 		return False
 
-	def pop(self, index = -1):
+	def pop(self, index=-1):
 		if self.size <= index:
 			raise IndexError
 		if index < 0:
 			index = self.size -1
-		gen = self.itemsInListGen()
-		for i in range(index):
+
+		if index == 0:
+			storedVariable = self.front.storedItem
+			self.front = self.front.next
+			return storedVariable
+
+		gen = self.all_items_in_list_gen()
+		for i in range(index-1):
 			gen.__next__()
+		previous = gen.__next__()
 		currentItem = gen.__next__()
-		if currentItem.previous is not None:
-			currentItem.previous.next = currentItem.next
-		else:
-			self.front = currentItem.next
-		if currentItem.next is not None:
-			currentItem.next.previous = currentItem.previous
+		previous.next = currentItem.next
 		self.size -= 1
 		return currentItem.storedItem
 
 	def search(self, objectToLookFor):
-		for item in self.itemsInListGen():
+		for item in self.all_items_in_list_gen():
 			if item.storedItem == objectToLookFor:
 				return True
 			if item.storedItem > objectToLookFor:
@@ -66,21 +72,29 @@ class OrderedList:
 
 	def index(self, indexNumber):
 		try:
-			gen = self.itemsInListGen()
+			gen = self.all_items_in_list_gen()
 			for i in range(indexNumber):
 				gen.__next__()
 			return gen.__next__().storedItem
 		except:
 			raise IndexError
 
-	def itemsInListGen(self):
+	def all_items_in_list_gen(self):
 		currentItem = self.front
 		while currentItem is not None:
 			yield(currentItem)
 			currentItem = currentItem.next
 
+	def nextItemGenerator(self):
+		#This function doesn't return the last item
+		if self.front is not None:
+			currentItem = self.front
+			while currentItem.next is not None:
+				yield currentItem
+				currentItem = currentItem.next
+
 	def __str__(self):
-		listItems = [x.storedItem for x in self.itemsInListGen()]
+		listItems = [x.storedItem for x in self.all_items_in_list_gen()]
 		return str(listItems)
 
 	def isEmpty(self):
@@ -88,7 +102,6 @@ class OrderedList:
 
 
 class OrderedListItem:
-	def __init__(self, item, next, previous):
+	def __init__(self, item, next):
 		self.storedItem = item
 		self.next = next
-		self.previous = previous

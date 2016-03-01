@@ -41,7 +41,7 @@ class Deque:
 	def popRear(self):
 		if self.rear is None:
 			raise KeyError
-		self.size-=1
+		self.size -= 1
 		var = self.rear.object
 		self.rear = self.rear.next
 		if self.rear is None:
@@ -51,8 +51,6 @@ class Deque:
 	def isEmpty(self):
 		return self.front is None and self.rear is None
 
-	
-
 class DequeItem:
 	def __init__(self, object, previous=None, next=None):
 		self.object = object
@@ -61,6 +59,6 @@ class DequeItem:
 
 	def updatePrevious(self, previous):
 		self.previous = previous
-	
+
 	def updateNext(self, next):
 		self.next = next
